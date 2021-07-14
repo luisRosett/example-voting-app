@@ -1,3 +1,3 @@
 
-* Build Status
-[![Build Status](http://9e0d052c4997.ngrok.io/buildStatus/icon?job=instavote%2Fworker-build)](http://9e0d052c4997.ngrok.io/job/instavote/job/worker-build/)
+* Build Statuss
+[![Build Status](http://06dc4854eb1c.ngrok.io/github-webhook/buildStatus/icon?job=instavote%2Fworker-build)](http://06dc4854eb1c.ngrok.io/github-webhook/job/instavote/job/worker-build/)
