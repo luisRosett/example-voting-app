@@ -7,10 +7,6 @@ pipeline {
 
     stages {
         stage('build') {
-            when {
-                branch 'master'
-                changeset "**/result/**"
-            }
             steps {
                 echo 'Compiling result app'
                 dir('result'){
@@ -19,10 +15,6 @@ pipeline {
             }
         }
         stage('test') {
-            when {
-                branch 'master'
-                changeset "**/result/**"
-            }
             steps {
                 echo 'Running Unit Tests on result app'
                 dir('result'){
