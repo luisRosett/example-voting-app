@@ -7,17 +7,23 @@ pipeline {
 
     stages {
         stage('build') {
+            when {
+                changeset "**/vote/**"
+            }
             steps {
-                echo 'Compiling result app'
-                dir('result'){
+                echo 'Compiling python app'
+                dir('vote'){
                         sh 'pip install -i requirements.txt'
                 }
             }
         }
         stage('test') {
+            when {
+                changeset "**/vote/**"
+            }
             steps {
-                echo 'Running Unit Tests on result app'
-                dir('result'){
+                echo 'Running Unit Tests on python app'
+                dir('vote'){
                     sh 'nosetests -v'
                 }
             }
@@ -25,7 +31,7 @@ pipeline {
     }
     post {
         always{
-            echo 'Build pipeline for result is complete...'
+            echo 'Build pipeline for vote is complete...'
 
         }
         failure{
