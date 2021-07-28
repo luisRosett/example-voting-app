@@ -1,8 +1,8 @@
 pipeline {
-    agent any
-
-    tools {
-        nodejs 'NodeJS 16.4.2'
+    agent {
+        docker {
+            image 'node:16.5-alpine3.14'
+        }
     }
 
     stages {
@@ -22,6 +22,18 @@ pipeline {
                     sh 'npm test'
                 }
             }
+        }
+    }
+    post {
+        always{
+            echo 'Build pipeline for worker is complete...'
+
+        }
+        failure{
+            slackSend (channel: "instavote-cd",message: "Build Failed - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+        }
+        success{
+            slackSend (channel: "instavote-cd",message: "Build Succeded - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
         }
     }
 }
