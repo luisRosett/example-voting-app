@@ -25,7 +25,29 @@ pipeline {
             steps {
                 echo 'Running Unit Tests on python app'
                 dir('vote'){
+                    sh 'pip install -r requirements.txt'
                     sh 'nosetests -v'
+                }
+            }
+        }
+        stage('docker-package') {
+            agent any
+            when {
+                changeset "**/vote/**"
+                branch 'master'
+            }
+            steps {
+                echo 'Packaging vote app with docker'
+                script {
+                     docker.withRegistry('https://index.docker.io/v1/', 'dockerlogin') {
+
+                        def workerImage = docker.build("luisroset/vote:v${env.BUILD_ID}", "./vote")
+
+                        /* Push the container to the custom Registry */
+                        
+                        workerImage.push("${env.BUILD_NUMBER}")
+                        workerImage.push("latest") 
+                    }
                 }
             }
         }
