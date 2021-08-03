@@ -132,6 +132,11 @@ pipeline {
             }
         }
         stage('result build') {
+            agent {
+                docker {
+                    image 'node:alpine'
+                }
+            }
             when {
                 changeset "**/result/**"
             }
@@ -143,6 +148,11 @@ pipeline {
             }
         }
         stage('result test') {
+            agent {
+                docker {
+                    image 'node:alpine'
+                }
+            }
             when {
                 changeset "**/result/**"
             }
