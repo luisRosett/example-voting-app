@@ -209,13 +209,12 @@ pipeline {
 
         stage("Quality Gate") {
             steps {
-                withSonarQubeEnv('sonar-instavote') {
-                    timeout(time: 1, unit: 'HOURS') {
-                        // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-                        // true = set pipeline to UNSTABLE, false = don't
-                        waitForQualityGate abortPipeline: true
-                    }
+                timeout(time: 1, unit: 'HOURS') {
+                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                    // true = set pipeline to UNSTABLE, false = don't
+                    waitForQualityGate abortPipeline: true
                 }
+                
             }
         }
     } 
