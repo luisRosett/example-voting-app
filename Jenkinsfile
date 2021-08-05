@@ -121,6 +121,7 @@ pipeline {
                 dir('vote'){
                     sh 'integration_test.sh'
                 }
+            }
         }
          
         stage('vote docker-package') {
