@@ -1,71 +1,59 @@
 pipeline {
-    agent none
+    agent {
+        docker {
+            image 'python:latest'
+            args '--user root'
+        }
+    }
 
     stages {
         stage('build') {
             agent {
                 docker {
-                    image 'maven:alpine'
-                    args '-v $HOME/.m2:/root/.m2'
+                    image 'python:latest'
+                    args '--user root'
                 }
             }
             when {
-                changeset "**/worker/**"
+                changeset "**/vote/**"
             }
             steps {
-                echo 'Compiling worker app'
-                dir('worker'){
-                        sh 'mvn compile'
+                echo 'Compiling python app'
+                dir('vote'){
+                        sh 'pip install -r requirements.txt'
                 }
             }
         }
         stage('test') {
             agent {
                 docker {
-                    image 'maven:alpine'
-                    args '-v $HOME/.m2:/root/.m2'
+                    image 'python:latest'
+                    args '--user root'
                 }
             }
             when {
-                changeset "**/worker/**"
+                changeset "**/vote/**"
             }
             steps {
-                echo 'Running Unit Tests on worker app'
-                dir('worker'){
-                    sh 'mvn clean test'
-                }
-            }
-        }
-        stage('package') {
-            agent {
-                docker {
-                    image 'maven:alpine'
-                    args '-v $HOME/.m2:/root/.m2'
-                }
-            }
-            when {
-                changeset "**/worker/**"
-            }
-            steps {
-                echo 'Packaging worker app'
-                dir('worker'){
-                    sh 'mvn package -DskipTests'
-                    archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+                echo 'Running Unit Tests on python app'
+                dir('vote'){
+                    sh 'pip install -r requirements.txt'
+                    sh 'nosetests -v'
                 }
             }
         }
         stage('docker-package') {
             agent any
             when {
-                changeset "**/worker/**"
+                changeset "**/vote/**"
                 branch 'master'
             }
             steps {
-                echo 'Packaging worker app with docker'
+                echo 'Packaging vote app with docker'
                 script {
                      docker.withRegistry('https://index.docker.io/v1/', 'dockerlogin') {
 
-                        def workerImage = docker.build("luisroset/worker:v${env.BUILD_ID}", "./worker")
+                        def workerImage = docker.build("luisroset/vote:${env.BUILD_ID}", "./vote")
 
                         /* Push the container to the custom Registry */
                         
@@ -75,10 +63,10 @@ pipeline {
                 }
             }
         }
-    } 
+    }
     post {
         always{
-            echo 'Build pipeline for worker is complete...'
+            echo 'Build pipeline for vote is complete...'
 
         }
         failure{
