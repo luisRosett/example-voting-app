@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:latest'
-            args '--user root'
-        }
-    }
+    agent none
 
     stages {
         stage('build') {
@@ -13,9 +8,6 @@ pipeline {
                     image 'python:latest'
                     args '--user root'
                 }
-            }
-            when {
-                changeset "**/vote/**"
             }
             steps {
                 echo 'Compiling python app'
@@ -30,9 +22,6 @@ pipeline {
                     image 'python:latest'
                     args '--user root'
                 }
-            }
-            when {
-                changeset "**/vote/**"
             }
             steps {
                 echo 'Running Unit Tests on python app'
