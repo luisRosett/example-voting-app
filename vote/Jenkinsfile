@@ -53,7 +53,7 @@ pipeline {
                 script {
                      docker.withRegistry('https://index.docker.io/v1/', 'dockerlogin') {
 
-                        def workerImage = docker.build("luisroset/vote:v${env.BUILD_ID}", "./vote")
+                        def workerImage = docker.build("luisroset/vote:${env.BUILD_ID}", "./vote")
 
                         /* Push the container to the custom Registry */
                         
