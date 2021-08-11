@@ -128,7 +128,6 @@ pipeline {
             agent any
             when {
                 changeset "**/vote/**"
-                branch 'master'
             }
             steps {
                 echo 'Packaging vote app with docker'
