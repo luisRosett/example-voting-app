@@ -139,7 +139,7 @@ pipeline {
                         /* Push the container to the custom Registry */
                         
                         workerImage.push("${env.BUILD_NUMBER}")
-                        workerImage.push("latest") 
+                        workerImage.push("vote") 
                     }
                 }
             }
